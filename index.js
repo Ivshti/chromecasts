@@ -76,8 +76,12 @@ module.exports = function () {
           p.on('status', function (status) {
             player.emit('status', status)
           })
-
-          cb(null, p)
+          
+          // ensure we have a session when we re-connect before doing session-requiring operations
+          p.getStatus(function(err) {
+            if (err) return cb(err)
+            cb(null, p)
+          })
         })
       })
     })
